@@ -1,0 +1,18 @@
+Retrieved 2026-10-07. browsercc 0.1.1 build references LLVM 20.1.2 and wasi-sdk 25.
+WASI libc revision: 574b88da481569b65a237cb80daf9a2d5aeaf82d
+
+LLVM-llvm.txt: https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.2/llvm/LICENSE.TXT
+LLVM-clang.txt: https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.2/clang/LICENSE.TXT
+LLVM-lld.txt: https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.2/lld/LICENSE.TXT
+LLVM-libcxx.txt: https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.2/libcxx/LICENSE.TXT
+LLVM-libcxxabi.txt: https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.2/libcxxabi/LICENSE.TXT
+LLVM-compiler-rt.txt: https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-20.1.2/compiler-rt/LICENSE.TXT
+wasi-libc-LICENSE.txt: https://raw.githubusercontent.com/WebAssembly/wasi-libc/574b88da481569b65a237cb80daf9a2d5aeaf82d/LICENSE
+wasi-libc-LICENSE-APACHE.txt: https://raw.githubusercontent.com/WebAssembly/wasi-libc/574b88da481569b65a237cb80daf9a2d5aeaf82d/LICENSE-APACHE
+wasi-libc-LICENSE-APACHE-LLVM.txt: https://raw.githubusercontent.com/WebAssembly/wasi-libc/574b88da481569b65a237cb80daf9a2d5aeaf82d/LICENSE-APACHE-LLVM
+wasi-libc-LICENSE-MIT.txt: https://raw.githubusercontent.com/WebAssembly/wasi-libc/574b88da481569b65a237cb80daf9a2d5aeaf82d/LICENSE-MIT
+wasi-libc-fts-musl-fts-COPYING.txt: https://raw.githubusercontent.com/WebAssembly/wasi-libc/574b88da481569b65a237cb80daf9a2d5aeaf82d/fts/musl-fts/COPYING
+wasi-libc-libc-bottom-half-cloudlibc-LICENSE.txt: https://raw.githubusercontent.com/WebAssembly/wasi-libc/574b88da481569b65a237cb80daf9a2d5aeaf82d/libc-bottom-half/cloudlibc/LICENSE
+wasi-libc-libc-top-half-musl-COPYRIGHT.txt: https://raw.githubusercontent.com/WebAssembly/wasi-libc/574b88da481569b65a237cb80daf9a2d5aeaf82d/libc-top-half/musl/COPYRIGHT
+wasi-libc-tools-wasi-headers-LICENSE.txt: https://raw.githubusercontent.com/WebAssembly/wasi-libc/574b88da481569b65a237cb80daf9a2d5aeaf82d/tools/wasi-headers/LICENSE
+emscripten-LICENSE.txt: https://raw.githubusercontent.com/emscripten-core/emscripten/4.0.7/LICENSE
