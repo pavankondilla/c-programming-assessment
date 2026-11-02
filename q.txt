@@ -1,0 +1,93 @@
+Q1. Arithmetic operations
+
+Write a C program to accept two numbers and perform addition, subtraction, multiplication, division, and modulus operations. Handle division by zero appropriately.
+
+Q2. Even or odd
+
+Write a C program to check whether a given integer is even or odd.
+
+Q3. Largest of three numbers
+
+Write a C program to find the largest of three numbers using if-else statements.
+
+Q4. Multiplication table
+
+Write a C program to print the multiplication table of a given number using a loop.
+
+Q5. Prime number
+
+Write a C program to check whether a given integer is prime.
+
+Part B — Arrays and Strings
+
+Q6. Largest and smallest elements
+
+Write a C program to find the largest and smallest elements in an array.
+
+Q7. Array sorting
+
+Write a C program to sort an array in ascending order.
+
+Q8. Linear search
+
+Write a C program to search for an element in an array using linear search and display its position if found.
+
+Q9. Sum and average
+
+Write a C program to calculate the sum and average of the elements in an array.
+
+Q10. String length
+
+Write a C program to find the length of a string without using the strlen() function.
+
+Part C — Pointers and Dynamic Memory Allocation
+
+Q11. Pointers
+
+Write a C program using pointers to access and display the value and address of a variable.
+
+Q12. Dynamic memory allocation
+
+Write a C program using malloc() to allocate memory for n integers, accept the values, display them, and release the allocated memory using free().
+
+Part D — File Handling and Menu-Driven Programming
+
+Q13. File handling
+
+Write a C program to create a file, write student details into it, and read the details back from the file.
+
+Q14. Menu-driven calculator
+
+Write a menu-driven C program with the following options:
+
+Add
+
+Subtract
+
+Multiply
+
+Divide
+
+Exit
+
+The program must continue displaying the menu until the user selects Exit. Handle division by zero.
+
+Part E — Mini Project
+
+Q15. Student Management System in C
+
+Develop a Student Management System using structures and functions with the following options:
+
+Add student details
+
+Display all students
+
+Search for a student
+
+Find the student with the highest marks
+
+Calculate average marks
+
+Exit the application
+
+Use a structure to store student information, such as student ID, name, and marks. Use separate functions to implement the operations and validate user input.

@@ -29,7 +29,7 @@ export function validateAttempt(input: unknown, requireSubmitted = false): Attem
   const selected = str(a.selected, 'Selected question', 10);
   if (!questions.some(q => q.id === selected)) throw new Error('Selected question is not part of this examination.');
   const sourceAnswers = object(a.answers, 'Answers');
-  if (Object.keys(sourceAnswers).length !== 42) throw new Error('The submission must contain all 12 coding answers and all 30 blank answers, including empty answers.');
+  if (Object.keys(sourceAnswers).length !== questions.length) throw new Error('The submission must contain all coding answers and all 30 blank answers, including empty answers.');
   const answers = Object.fromEntries(questions.map(q => {
     const ans = object(sourceAnswers[q.id], `Answer ${q.id}`);
     if (typeof ans.flagged !== 'boolean') throw new Error(`The review flag for ${q.id} is invalid.`);

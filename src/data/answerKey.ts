@@ -1,5 +1,5 @@
-// Loaded by the examiner screen only. This is demo access control, not a secret key.
-// Checked against C17 semantics; whitespace variants are accepted deliberately.
+// This answer key is included in the public frontend bundle for static exam scoring.
+// It is not suitable for confidential or tamper-resistant assessments.
 export const answerKey: Record<string, string[]> = {
   b1: ['stdio.h'], b2: ['printf', 'printf()'], b3: ['scanf', 'scanf()'], b4: ['%d'],
   b5: ['&'], b6: ['%'], b7: ['0'], b8: ['3'], b9: ['2'], b10: ['=='],

@@ -1,22 +1,34 @@
-export const EXAM_VERSION = 'c-2026.1';
+import paper from '../../q.txt?raw';
+
+export const EXAM_VERSION = 'c-2026.2';
 export const DURATION_MS = 180 * 60 * 1000;
 export type Difficulty = 'Hard' | 'Medium' | 'Easy';
-export type Question = { id: string; number: number; title: string; prompt: string; marks: number; difficulty?: Difficulty };
+export type Question = { id: string; number: number; title: string; prompt: string; marks: number; difficulty?: Difficulty; part?: string };
 
-export const codingQuestions: Question[] = [
-  { id: 'c1', number: 1, title: 'Student Management System', marks: 10, difficulty: 'Hard', prompt: 'Write a menu-driven C program using structures and functions to manage up to 100 students. Store roll number, name and marks out of 100. Support adding students, displaying students, searching by roll number, displaying the student with the highest marks, calculating average marks and exiting. Reject duplicate roll numbers and invalid marks. Handle an empty list.' },
-  { id: 'c2', number: 2, title: 'Student File Operations', marks: 10, difficulty: 'Hard', prompt: 'Accept a student’s roll number, name and marks. Write the details to student.txt, close the file, reopen it and display its contents. Handle file-opening failures. Names may contain spaces.' },
-  { id: 'c3', number: 3, title: 'Dynamic Memory Allocation', marks: 10, difficulty: 'Hard', prompt: 'Accept a positive n. Use malloc() to allocate space for n integers. Check allocation success, accept and display the integers, calculate sum and floating-point average, and release memory with free().' },
-  { id: 'c4', number: 4, title: 'Array Sorting and Searching', marks: 10, difficulty: 'Hard', prompt: 'Accept 1–100 integers. Sort them in ascending order without a library sorting function. Display the sorted array. Perform linear search for an input value. Display its first position in the sorted array, counting from 1, or “Not found.”' },
-  { id: 'c5', number: 5, title: 'Prime Number', marks: 5, difficulty: 'Medium', prompt: 'Check whether an input integer is prime. Correctly handle values less than 2.' },
-  { id: 'c6', number: 6, title: 'Array Statistics', marks: 5, difficulty: 'Medium', prompt: 'Accept 1–100 integers and display the largest, smallest, sum and floating-point average.' },
-  { id: 'c7', number: 7, title: 'String Length Using Pointers', marks: 5, difficulty: 'Medium', prompt: 'Read a string and calculate its length using a pointer without strlen(). Count spaces, but exclude the terminating null character and input newline.' },
-  { id: 'c8', number: 8, title: 'Menu-Driven Calculator', marks: 5, difficulty: 'Medium', prompt: 'Use a loop and switch to offer Add, Subtract, Multiply, Divide and Exit. Accept two numbers for each calculation. Handle division by zero and invalid choices. Repeat until Exit.' },
-  { id: 'c9', number: 9, title: 'Arithmetic Operations', marks: 2.5, difficulty: 'Easy', prompt: 'Accept two integers and display addition, subtraction, multiplication, integer division and remainder. Handle a zero second operand before division or modulus.' },
-  { id: 'c10', number: 10, title: 'Even or Odd', marks: 2.5, difficulty: 'Easy', prompt: 'Check whether an input integer is even or odd.' },
-  { id: 'c11', number: 11, title: 'Largest of Three', marks: 2.5, difficulty: 'Easy', prompt: 'Use if-else to display the largest of three integers. Handle equal values.' },
-  { id: 'c12', number: 12, title: 'Multiplication Table', marks: 2.5, difficulty: 'Easy', prompt: 'Use a loop to print an input integer’s multiplication table from 1 to 10.' },
-];
+// Parts A-E total 70 coding marks. The unchanged 30 blanks add 30 marks.
+export const CODING_MARKS = [4, 2, 2, 2, 2, 4, 4, 4, 3, 3, 4, 6, 7, 8, 15] as const;
+function parseCodingPaper(text: string): Question[] {
+  const found: { number: number; title: string; prompt: string; part: string }[] = [];
+  let part = 'Part A - C Programming Fundamentals';
+  let current: { number: number; title: string; lines: string[]; part: string } | null = null;
+  const finish = () => {
+    if (current) found.push({ number: current.number, title: current.title, prompt: current.lines.join('\n').trim(), part: current.part });
+  };
+  for (const line of text.replace(/\r\n/g, '\n').split('\n')) {
+    const section = line.trim();
+    if (/^Part [B-E]\s*[-\u2014]/.test(section)) { finish(); current = null; part = section; continue; }
+    const match = /^Q(\d+)\.\s*(.+)$/.exec(section);
+    if (match) { finish(); current = { number: Number(match[1]), title: match[2].trim(), lines: [], part }; continue; }
+    if (current) current.lines.push(line);
+  }
+  finish();
+  if (found.length !== CODING_MARKS.length || found.some((q, i) => q.number !== i + 1 || !q.prompt)) throw new Error('q.txt must contain Q1 through Q15 with a prompt for each question.');
+  return found.map((q, i) => ({
+    id: `c${i + 1}`, number: q.number, title: q.title, prompt: q.prompt, part: q.part, marks: CODING_MARKS[i],
+    difficulty: CODING_MARKS[i] >= 6 ? 'Hard' : CODING_MARKS[i] >= 3 ? 'Medium' : 'Easy',
+  }));
+}
+export const codingQuestions: Question[] = parseCodingPaper(paper);
 
 const blankPrompts = [
   'The standard input/output header is #include <________>.',

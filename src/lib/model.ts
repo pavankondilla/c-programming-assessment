@@ -7,13 +7,13 @@ export type Review = { scores: Record<string, number | null>; feedback: string; 
 export type Attempt = {
   id: string; examVersion: string; studentName: string; startedAt: number; deadline: number;
   submittedAt: number | null; submissionReason: 'manual' | 'expired' | null; selected: string;
-  answers: Record<string, Answer>; review: Review;
+  answers: Record<string, Answer>; review: Review; email?: string; emailStatus?: string;
 };
 export type Store = { schemaVersion: 1; activeId: string | null; attempts: Attempt[] };
 export const STORAGE_KEY = 'c-assessment.store.v1';
 export const emptyStore = (): Store => ({ schemaVersion: 1, activeId: null, attempts: [] });
-export function newAttempt(now = Date.now()): Attempt {
-  return { id: crypto.randomUUID(), examVersion: EXAM_VERSION, studentName: 'trainee', startedAt: now, deadline: now + DURATION_MS,
+export function newAttempt(now = Date.now(), studentName = 'Vishal'): Attempt {
+  return { id: crypto.randomUUID(), examVersion: EXAM_VERSION, studentName, startedAt: now, deadline: now + DURATION_MS,
     submittedAt: null, submissionReason: null, selected: 'c1',
     answers: Object.fromEntries(questions.map(q => [q.id, { value: '', stdin: '', flagged: false, timeMs: 0, lastRun: null }])),
     review: { scores: Object.fromEntries(questions.map(q => [q.id, null])), feedback: '', reviewedAt: null },
@@ -23,7 +23,7 @@ export const isAnswered = (answer: Answer) => answer.value.trim().length > 0;
 export function counts(attempt: Attempt) {
   const coding = codingQuestions.filter(q => isAnswered(attempt.answers[q.id])).length;
   const blanks = blankQuestions.filter(q => isAnswered(attempt.answers[q.id])).length;
-  return { coding, blanks, answered: coding + blanks, unanswered: 42 - coding - blanks, flagged: questions.filter(q => attempt.answers[q.id].flagged).length };
+  return { coding, blanks, answered: coding + blanks, unanswered: questions.length - coding - blanks, flagged: questions.filter(q => attempt.answers[q.id].flagged).length };
 }
 export function totals(attempt: Attempt) {
   const sum = (ids: string[]) => ids.reduce((total, id) => total + (attempt.review.scores[id] ?? 0), 0);

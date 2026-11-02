@@ -3,20 +3,27 @@ import { blankQuestions, codingQuestions, DURATION_MS, questions } from '../../s
 import { answerKey, markBlank } from '../../src/data/answerKey';
 import { counts, exportSubmission, newAttempt, submitAttempt, totals } from '../../src/lib/model';
 import { importSubmission, validateAttempt } from '../../src/lib/validation';
+import { authenticate } from '../../src/lib/auth';
 
 describe('examination contract', () => {
-  it('contains exactly 100 marks, 4 coding questions per difficulty, and 30 unique blanks', () => {
+  it('accepts the two configured browser accounts and rejects a wrong password', () => {
+    expect(authenticate('Vishal', 'vishal@exam')).toEqual({ role: 'student', name: 'vishal' });
+    expect(authenticate('vaishu', 'vaishu@123')).toEqual({ role: 'student', name: 'vaishu' });
+    expect(authenticate('vaishu', 'wrong')).toBeNull();
+  });
+  it('contains exactly 100 marks, 15 coding questions across three difficulties, and 30 unique blanks', () => {
     expect(questions.reduce((sum, q) => sum + q.marks, 0)).toBe(100);
     expect(codingQuestions.reduce((sum, q) => sum + q.marks, 0)).toBe(70);
     expect(blankQuestions).toHaveLength(30);
-    expect(new Set(questions.map(q => q.id)).size).toBe(42);
-    for (const difficulty of ['Hard', 'Medium', 'Easy']) expect(codingQuestions.filter(q => q.difficulty === difficulty)).toHaveLength(4);
-    expect(codingQuestions.map(q => q.difficulty)).toEqual([...Array(4).fill('Hard'), ...Array(4).fill('Medium'), ...Array(4).fill('Easy')]);
+    expect(new Set(questions.map(q => q.id)).size).toBe(45);
+    expect(codingQuestions.filter(q => q.difficulty === 'Hard')).toHaveLength(4);
+    expect(codingQuestions.filter(q => q.difficulty === 'Medium')).toHaveLength(7);
+    expect(codingQuestions.filter(q => q.difficulty === 'Easy')).toHaveLength(4);
   });
   it('starts empty with an immutable three-hour deadline', () => {
     const a = newAttempt(1000000);
     expect(a.deadline).toBe(1000000 + DURATION_MS);
-    expect(counts(a)).toMatchObject({ answered: 0, unanswered: 42 });
+    expect(counts(a)).toMatchObject({ answered: 0, unanswered: 45 });
     expect(Object.values(a.answers).every(answer => answer.value === '' && answer.timeMs === 0)).toBe(true);
   });
   it('exports and imports all answers, stdin, flags, run metadata, timing and review exactly', () => {
@@ -26,9 +33,9 @@ describe('examination contract', () => {
     const submitted = submitAttempt(a, 'manual', 1003000);
     const json = exportSubmission(submitted);
     expect(importSubmission(json)).toEqual(submitted);
-    expect(JSON.parse(json).summary).toMatchObject({ answered: 42, unanswered: 0, marks: { maximum: 100, final: false } });
+    expect(JSON.parse(json).summary).toMatchObject({ answered: 45, unanswered: 0, marks: { maximum: 100, final: false } });
     expect(json).not.toMatch(/password|CExam@123|Review@123/);
-    expect(counts(importSubmission(json))).toMatchObject({ answered: 42, unanswered: 0 });
+    expect(counts(importSubmission(json))).toMatchObject({ answered: 45, unanswered: 0 });
   });
   it('submits expired work at its stored deadline, once only', () => {
     const a = newAttempt(1000000);
@@ -51,7 +58,7 @@ describe('examination contract', () => {
     questions.forEach(q => { a.review.scores[q.id] = q.marks; });
     expect(totals(a)).toEqual({ coding: 70, blanks: 30, total: 100, pending: 0 });
     a.review.scores.c9 = 1.5; a.review.scores.b1 = 0.5;
-    expect(totals(validateAttempt(a)).total).toBe(98.5);
+    expect(totals(validateAttempt(a)).total).toBe(98);
   });
   it.each([
     ['malformed JSON', '{', /valid JSON/],
@@ -60,7 +67,7 @@ describe('examination contract', () => {
     ['active attempt', exportSubmission(newAttempt()), /still in progress/],
   ])('rejects %s with a helpful error', (_, content, error) => expect(() => importSubmission(content)).toThrow(error));
   it.each([
-    ['missing answer', (a: any) => { delete a.answers.b30; }, /all 12/],
+    ['missing answer', (a: any) => { delete a.answers.b30; }, /all coding answers/],
     ['unknown exam', (a: any) => { a.examVersion = 'invalid'; }, /exam version/],
     ['invalid score', (a: any) => { a.review.scores.c1 = 11; }, /allowed range/],
     ['quarter marks', (a: any) => { a.review.scores.c1 = 1.25; }, /half-mark/],
