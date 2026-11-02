@@ -7,7 +7,7 @@ import { authenticate } from '../../src/lib/auth';
 
 describe('examination contract', () => {
   it('accepts the two configured browser accounts and rejects a wrong password', () => {
-    expect(authenticate('Vishal', 'vishal@exam')).toEqual({ role: 'student', name: 'vishal' });
+    expect(authenticate('Vishal', 'vishal@123')).toEqual({ role: 'student', name: 'vishal' });
     expect(authenticate('vaishu', 'vaishu123@')).toEqual({ role: 'student', name: 'vaishu' });
     expect(authenticate('vaishu', 'wrong')).toBeNull();
   });
